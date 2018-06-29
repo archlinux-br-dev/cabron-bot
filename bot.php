@@ -1,6 +1,12 @@
 <?php
 
+// Setar o WebHook: https://api.telegram.org/bot[TOKEN]/setWebhook?url=https://site.com/pasta/script.php
+
+// Comente esta linha...
 require_once "config.php";
+// Descomente as sequintes linhas e insira seu token.
+//define('BOT_TOKEN', 'TOKEN');
+//define('API_URL', 'https://api.telegram.org/bot'.BOT_TOKEN.'/');
 
 $hoje = date('Y-m-d');
 $json_feriados = file_get_contents('json/feriados.json');
@@ -27,17 +33,15 @@ function feriados($array_feriados, $hoje) {
       return $array_feriados[$closest];
 }
 
-//feriados($array_feriados, "2013-02-18 05:14:55");
-
 function pegaAdmins($chat_id) {
   $adm = apiRequestJson("getChatAdministrators", ["chat_id" => $chat_id]);
   $adm = json_decode($adm);
 
   foreach ($adm as $chave => $valor) {
       $l .= $valor['user']['username'] . "\n\n";
-  } 
+  }
 
-  return $l; 
+  return $l;
 }
 
 function cotacoes() {
@@ -46,12 +50,12 @@ function cotacoes() {
       exit;
   }
 
-  while(!feof($fp)) { 
+  while(!feof($fp)) {
       $conteudo .= fgets($fp,1024);
   }
   fclose($fp);
 
-  $valorCompraHTML = explode('class="numbers">', $conteudo); 
+  $valorCompraHTML = explode('class="numbers">', $conteudo);
   $valorCompra = trim(strip_tags($valorCompraHTML[5]));
 
   return $valorCompra;
@@ -100,7 +104,7 @@ function ddg($consulta) {
   $erro = "Desculpe, não fui capaz de encontrar esta página " . emoji('triste');
 
   if (!$pagina) return $erro;
-  
+
   $matches = array();
   if (preg_match('/<title>(.*?)<\/title>/', $pagina, $matches)) {
     return trim($matches[1]) . ": " . $url;
@@ -117,7 +121,7 @@ function man($consulta,$secao = null) {
   $erro = "Desculpe, não fui capaz de encontrar esta página " . emoji('triste');
 
   if (!$pagina) return $erro;
-  
+
   $matches = array();
   if (preg_match('/<title>(.*?)<\/title>/', $pagina, $matches)) {
     return "*" . trim($matches[1]) . "*\n\n" . $url;
@@ -162,7 +166,7 @@ function archwiki($consulta) {
 function pesquisaShell($comando,$nome) {
   $encontrado = false;
   $fh = fopen('txt/comandos2.txt','r');
- 
+
   while ($line = fgets($fh)) {
     $comp = explode(' ',trim($line));
     if (preg_match("~\b$comando\b~",$comp[0])) {
@@ -268,13 +272,13 @@ function processaCallbackQuery($callback){
   $chat_id = $callback['message']['chat']['id'];
   $data =  $callback['data'];
   if ($data == 'site') {
-    requisicao("sendMessage", array('chat_id' => $chat_id, 'disable_web_page_preview' => true, "text" => 'https://archlinux-br-dev.github.io/cabron')); 
+    requisicao("sendMessage", array('chat_id' => $chat_id, 'disable_web_page_preview' => true, "text" => 'https://archlinux-br-dev.github.io/cabron'));
   } else if ($data == 'github') {
-    requisicao("sendMessage", array('chat_id' => $chat_id, 'disable_web_page_preview' => true, "text" => 'https://github.com/archlinux-br-dev/cabron')); 
+    requisicao("sendMessage", array('chat_id' => $chat_id, 'disable_web_page_preview' => true, "text" => 'https://github.com/archlinux-br-dev/cabron'));
   } else if ($data == 'faq') {
-    requisicao("sendMessage", array('chat_id' => $chat_id, "text" => 'FAQ')); 
+    requisicao("sendMessage", array('chat_id' => $chat_id, "text" => 'FAQ'));
   } else if ($data == 'duvidas') {
-    requisicao("sendMessage", array('chat_id' => $chat_id, "text" => 'Em breve...')); 
+    requisicao("sendMessage", array('chat_id' => $chat_id, "text" => 'Em breve...'));
   }
 
   requisicao("answerCallbackQuery", array('callback_query_id' => $callback_id));
@@ -344,16 +348,16 @@ function processaMensagem($message) {
 
     } else if (strpos($text, "teste") === 0) {
       requisicao("sendChatAction", array('chat_id' => $chat_id, 'action' => 'typing'));
-      requisicao("sendMessage", array('chat_id' => $chat_id, "reply_to_message_id" => $message_id, "text" => emoji('teste')));      
+      requisicao("sendMessage", array('chat_id' => $chat_id, "reply_to_message_id" => $message_id, "text" => emoji('teste')));
 
     } else if (strpos($text, "/admins") === 0) {
       requisicao("sendChatAction", array('chat_id' => $chat_id, 'action' => 'typing'));
-      requisicao("sendMessage", array('chat_id' => $chat_id, "reply_to_message_id" => $message_id, "text" => pegaAdmins($chat_id)));      
-    
+      requisicao("sendMessage", array('chat_id' => $chat_id, "reply_to_message_id" => $message_id, "text" => pegaAdmins($chat_id)));
+
     } else if (strpos(strtolower($text),"cotação dolar") !== false || strpos(strtolower($text),"cotação do dolar") !== false || strpos(strtolower($text),"cotacao dolar") !== false || strpos(strtolower($text),"cotacao do dolar") !== false) {
         requisicao("sendChatAction", array('chat_id' => $chat_id, 'action' => 'typing'));
         requisicao("sendMessage", array('chat_id' => $chat_id, 'reply_to_message_id' => $message_id, 'parse_mode' => 'markdown', "text" => "A cotação do dolar hoje é *" . cotacoes() . "*"));
-    
+
     } else if (substr(strtolower($text), 0, 5) === "!man " || substr(strtolower($text), 0, 4) === "man ") {
       $n = palavras($comm);
       if ($n == 2) {
@@ -364,11 +368,11 @@ function processaMensagem($message) {
         requisicao("sendChatAction", array('chat_id' => $chat_id, 'action' => 'typing'));
         requisicao("sendMessage", array('chat_id' => $chat_id, "reply_to_message_id" => $message_id, 'parse_mode' => 'markdown', 'disable_web_page_preview' => true, "text" => man($comm)));
       }
-    
+
     } else if (substr(strtolower($text), 0, 5) === "!ddg " || substr(strtolower($text), 0, 4) === "ddg ") {
       requisicao("sendChatAction", array('chat_id' => $chat_id, 'action' => 'typing'));
       requisicao("sendMessage", array('chat_id' => $chat_id, "reply_to_message_id" => $message_id, "text" => ddg($comm)));
-    
+
     } else if ($text === "rdj" || strpos(strtolower($text),"http injector") !== false) {
       requisicao("sendChatAction", array('chat_id' => $chat_id, 'action' => 'typing'));
       requisicao("sendSticker", array('chat_id' => $chat_id, "sticker" => 'CAADAQADfAYAAkEGgg6U-GRry3w3TAI')); 
@@ -379,8 +383,8 @@ function processaMensagem($message) {
 
     } else if (substr(strtolower($text), 0, 5) === "!wikipedia") {
       requisicao("sendChatAction", array('chat_id' => $chat_id, 'action' => 'typing'));
-      requisicao("sendMessage", array('chat_id' => $chat_id, "reply_to_message_id" => $message_id, "text" => wikipedia($comm)));      
-    
+      requisicao("sendMessage", array('chat_id' => $chat_id, "reply_to_message_id" => $message_id, "text" => wikipedia($comm)));
+
     } else if (substr(strtolower($text), 0, 6) === "!shell") {
       requisicao("sendChatAction", array('chat_id' => $chat_id, 'action' => 'typing'));
       if (isset($comm) && $comm != "") {
@@ -388,64 +392,64 @@ function processaMensagem($message) {
       } else {
         requisicao("sendMessage", array('chat_id' => $chat_id, "text" => $quem . " pesquisa inválida, uso: !shell comando"));
       }
-    
+
     } else if (strpos(strtolower($text),"!archlinux") !== false) {
       requisicao("sendChatAction", array('chat_id' => $chat_id, 'action' => 'typing'));
       requisicao("sendMessage", array('chat_id' => $chat_id, "text" => 'Tutorial de instalação do Arch Linux: http://telegra.ph/Instala%C3%A7%C3%A3o-Arch-Linux-03-24'));
-    
+
     } else if (strpos($text,"Cabron") !== false) {
       requisicao("sendChatAction", array('chat_id' => $chat_id, 'action' => 'typing'));
       requisicao("sendMessage", array('chat_id' => $chat_id, "text" => respostas('cabron')));
-    
+
     } else if (strpos(strtolower($text),"vou dormir") !== false) {
       requisicao("sendChatAction", array('chat_id' => $chat_id, 'action' => 'typing'));
       requisicao("sendVideo", array('chat_id' => $chat_id, "reply_to_message_id" => $message_id, "video" => 'https://cabron-bot.herokuapp.com/vid/dormir.mp4'));
-    
+
 #    } else if (strpos(strtolower($text),"morgareth") !== false || strtolower($text) === "nojo" || strpos(strtolower($text),"windows") !== false) {
 #      requisicao("sendChatAction", array('chat_id' => $chat_id, 'action' => 'typing'));
 #      requisicao("sendVideo", array('chat_id' => $chat_id, "reply_to_message_id" => $message_id, "video" => 'https://cabron-bot.herokuapp.com/vid/nojo.mp4'));
-    
+
     } else if (strtolower($text) === "grupo parado") {
       requisicao("sendChatAction", array('chat_id' => $chat_id, 'action' => 'typing'));
-      requisicao("sendAudio", array('chat_id' => $chat_id, "reply_to_message_id" => $message_id, "audio" => 'https://cabron-bot.herokuapp.com/snd/entalado.mp3'));      
-    
+      requisicao("sendAudio", array('chat_id' => $chat_id, "reply_to_message_id" => $message_id, "audio" => 'https://cabron-bot.herokuapp.com/snd/entalado.mp3'));
+
     } else if ($text == "!serjao") {
       requisicao("sendChatAction", array('chat_id' => $chat_id, 'action' => 'typing'));
       requisicao("sendMessage", array('chat_id' => $chat_id, "text" => respostas('serjao')));
-    
+
     //} else if (strpos(strtolower($text),"olá") !== false || $text === "Oi") {
       //requisicao("sendChatAction", array('chat_id' => $chat_id, 'action' => 'typing'));
       //requisicao("sendMessage", array('chat_id' => $chat_id, "text" => respostas('ola')));
-    
+
     } else if ($text === "que num vomitou") {
       requisicao("sendChatAction", array('chat_id' => $chat_id, 'action' => 'typing'));
       requisicao("sendMessage", array('chat_id' => $chat_id, "text" => 'A é! Peraí...'));
       requisicao("sendVideo", array('chat_id' => $chat_id, "reply_to_message_id" => $message_id, "video" => 'https://cabron-bot.herokuapp.com/vid/nojo.mp4'));
-    
+
     } else if (strpos($text, 'BOT') !== false) {
       $resposta = $respostas['bot'][array_rand($respostas['bot'])];
       requisicao("sendChatAction", array('chat_id' => $chat_id, 'action' => 'typing'));
       requisicao("sendMessage", array('chat_id' => $chat_id, "text" => respostas('bot')));
-    
+
     } else if (strpos(strtolower($text),"\xF0\x9F\x98\x88") !== false || strpos(strtolower($text),"\xF0\x9F\xA4\x98") !== false) {
       requisicao("sendChatAction", array('chat_id' => $chat_id, 'action' => 'typing'));
       //requisicao("sendMessage", array('chat_id' => $chat_id, "text" => 'https://www.youtube.com/watch?v=yrjZWi49KOk'));
       requisicao("sendAudio", array('chat_id' => $chat_id, "audio" => sons('rock')));
-    
-    } else if ($text === "O @Galdino0800 é o que?") {      
+
+    } else if ($text === "O @Galdino0800 é o que?") {
       requisicao("sendChatAction", array('chat_id' => $chat_id, 'action' => 'typing'));
       requisicao("sendMessage", array('chat_id' => $chat_id, "text" => 'Hummmmmmmm, danada! ;)'));
-    
+
     } else {
       if ($usuario == "Cabron") {
         requisicao("sendChatAction", array('chat_id' => $chat_id, 'action' => 'typing'));
         requisicao("sendMessage", array('chat_id' => $chat_id, "text" => respostas('cabron')));
       }
     }
-  } 
+  }
 }
 
-define('WEBHOOK_URL', 'https://cabron-bot.herokuapp.com');
+define('WEBHOOK_URL', 'https://lucasbrum.net/cabron/bot.php');
 
 $content = file_get_contents("php://input");
 $update = json_decode($content, true);
