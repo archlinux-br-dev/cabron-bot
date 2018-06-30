@@ -444,6 +444,10 @@ function processaMensagem($message) {
       requisicao("sendChatAction", array('chat_id' => $chat_id, 'action' => 'typing'));
       requisicao("sendMessage", array('chat_id' => $chat_id, "text" => 'Hummmmmmmm, danada! ;)'));
 
+    } else if (strpos(strtolower($text),"tosvaldo") !== false) {
+      requisicao("sendChatAction", array('chat_id' => $chat_id, 'action' => 'typing'));
+      requisicao("sendMessage", array('chat_id' => $chat_id, "reply_to_message_id" => $message_id, "text" => 'https://www.youtube.com/watch?v=LHxFGPrlJBQ'));
+
     } else {
       if ($usuario == "Cabron") {
         requisicao("sendChatAction", array('chat_id' => $chat_id, 'action' => 'typing'));
