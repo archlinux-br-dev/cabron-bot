@@ -413,6 +413,10 @@ function processaMensagem($message) {
       requisicao("sendChatAction", array('chat_id' => $chat_id, 'action' => 'typing'));
       requisicao("sendAudio", array('chat_id' => $chat_id, "reply_to_message_id" => $message_id, "audio" => CABRON_URL . 'snd/entalado.mp3'));
 
+    } else if (strtolower($text) === "cri cri") {
+      requisicao("sendChatAction", array('chat_id' => $chat_id, 'action' => 'typing'));
+      requisicao("sendAudio", array('chat_id' => $chat_id, "audio" => CABRON_URL . 'snd/cricri.mp3'));
+
     } else if ($text == "!serjao") {
       requisicao("sendChatAction", array('chat_id' => $chat_id, 'action' => 'typing'));
       requisicao("sendMessage", array('chat_id' => $chat_id, "text" => respostas('serjao')));
