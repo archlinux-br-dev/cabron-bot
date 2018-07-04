@@ -405,13 +405,17 @@ function processaMensagem($message) {
       requisicao("sendChatAction", array('chat_id' => $chat_id, 'action' => 'typing'));
       requisicao("sendVideo", array('chat_id' => $chat_id, "reply_to_message_id" => $message_id, "video" => CABRON_URL . 'vid/dormir.mp4'));
 
-#    } else if (strpos(strtolower($text),"morgareth") !== false || strtolower($text) === "nojo" || strpos(strtolower($text),"windows") !== false) {
-#      requisicao("sendChatAction", array('chat_id' => $chat_id, 'action' => 'typing'));
-#      requisicao("sendVideo", array('chat_id' => $chat_id, "reply_to_message_id" => $message_id, "video" => CABRON_URL . 'vid/nojo.mp4'));
-
     } else if (strtolower($text) === "grupo parado") {
       requisicao("sendChatAction", array('chat_id' => $chat_id, 'action' => 'typing'));
       requisicao("sendAudio", array('chat_id' => $chat_id, "reply_to_message_id" => $message_id, "audio" => CABRON_URL . 'snd/entalado.mp3'));
+
+    } else if (strtolower($text) === "\xF0\x9F\x90\xB6") {
+      requisicao("sendChatAction", array('chat_id' => $chat_id, 'action' => 'typing'));
+      requisicao("sendAudio", array('chat_id' => $chat_id, "reply_to_message_id" => $message_id, "audio" => CABRON_URL . 'snd/toma.mp3'));
+
+    } else if (strtolower($text) === "!krl") {
+      requisicao("sendChatAction", array('chat_id' => $chat_id, 'action' => 'typing'));
+      requisicao("sendAudio", array('chat_id' => $chat_id, "reply_to_message_id" => $message_id, "audio" => CABRON_URL . 'snd/caraio.mp3'));
 
     } else if (strtolower($text) === "cri cri") {
       requisicao("sendChatAction", array('chat_id' => $chat_id, 'action' => 'typing'));
@@ -437,7 +441,6 @@ function processaMensagem($message) {
 
     } else if (strpos(strtolower($text),"\xF0\x9F\x98\x88") !== false || strpos(strtolower($text),"\xF0\x9F\xA4\x98") !== false) {
       requisicao("sendChatAction", array('chat_id' => $chat_id, 'action' => 'typing'));
-      //requisicao("sendMessage", array('chat_id' => $chat_id, "text" => 'https://www.youtube.com/watch?v=yrjZWi49KOk'));
       requisicao("sendAudio", array('chat_id' => $chat_id, "audio" => sons('rock')));
 
     } else if ($text === "O @Galdino0800 é o que?") {
