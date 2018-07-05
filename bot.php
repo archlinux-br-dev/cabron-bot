@@ -429,6 +429,14 @@ function processaMensagem($message) {
       requisicao("sendChatAction", array('chat_id' => $chat_id, 'action' => 'typing'));
       requisicao("sendAudio", array('chat_id' => $chat_id, "audio" => CABRON_URL . 'snd/cricri.mp3'));
 
+    } else if ($text === "!os") {
+      requisicao("sendChatAction", array('chat_id' => $chat_id, 'action' => 'typing'));
+      requisicao("sendAudio", array('chat_id' => $chat_id, "audio" => CABRON_URL . 'snd/oldspice.mp3'));
+
+    } else if ($text === "!osf") {
+      requisicao("sendChatAction", array('chat_id' => $chat_id, 'action' => 'typing'));
+      requisicao("sendAudio", array('chat_id' => $chat_id, "audio" => CABRON_URL . 'snd/oldspice-full.mp3'));
+
     } else if ($text == "!serjao") {
       requisicao("sendChatAction", array('chat_id' => $chat_id, 'action' => 'typing'));
       requisicao("sendMessage", array('chat_id' => $chat_id, "text" => respostas('serjao')));
