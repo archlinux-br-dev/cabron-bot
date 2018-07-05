@@ -405,6 +405,14 @@ function processaMensagem($message) {
       requisicao("sendChatAction", array('chat_id' => $chat_id, 'action' => 'typing'));
       requisicao("sendVideo", array('chat_id' => $chat_id, "reply_to_message_id" => $message_id, "video" => CABRON_URL . 'vid/dormir.mp4'));
 
+    } else if (strpos(strtolower($text),"aí sim heim") !== false) {
+      requisicao("sendChatAction", array('chat_id' => $chat_id, 'action' => 'typing'));
+      requisicao("sendVideo", array('chat_id' => $chat_id, "reply_to_message_id" => $message_id, "video" => CABRON_URL . 'vid/olha.mp4'));
+
+    } else if (strtolower($text) === "lol") {
+      requisicao("sendChatAction", array('chat_id' => $chat_id, 'action' => 'typing'));
+      requisicao("sendSticker", array('chat_id' => $chat_id, "sticker" => 'CAADAgADyikAAktqAwABQX0_7H5oJSoC'));
+
     } else if (strtolower($text) === "grupo parado") {
       requisicao("sendChatAction", array('chat_id' => $chat_id, 'action' => 'typing'));
       requisicao("sendAudio", array('chat_id' => $chat_id, "reply_to_message_id" => $message_id, "audio" => CABRON_URL . 'snd/entalado.mp3'));
