@@ -24,7 +24,7 @@ function emoji($emoji) {
 }
 
 function feriados($array_feriados, $hoje) {
-      //foreach($array_feriados as $day) {
+       //foreach($array_feriados as $day) {
       foreach($array_feriados as $key => $value){
           $interval[] = abs(strtotime($hoje) - strtotime(key[$array_feriados[$key]]));
       }
