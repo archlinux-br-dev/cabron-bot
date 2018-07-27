@@ -13,6 +13,65 @@ $hoje = date('Y-m-d');
 $json_feriados = file_get_contents('json/feriados.json');
 $array_feriados = json_decode($json_feriados);
 
+function top() {
+  try {
+    $file_db = new PDO('sqlite:rank.sqlite3');
+    $file_db->setAttribute(PDO::ATTR_ERRMODE,
+                            PDO::ERRMODE_EXCEPTION);
+
+    $file_db->exec("CREATE TABLE IF NOT EXISTS rank (
+                    id INTEGER PRIMARY KEY,
+                    votos INTEGER,
+                    nick TEXT,
+                    motivo TEXT)");
+
+    $result = $file_db->query('SELECT * FROM rank ORDER BY votos DESC;');
+
+    foreach($result as $row) {
+      $saida .= "ID: " . $row['id'] . "\n";
+      $saida .= "Votos: " . $row['votos'] . "\n";
+      $saida .= "Nick: @" . $row['nick'] . "\n";
+      $saida .= "Motivo: " . $row['motivo'] . "\n";
+      $saida .= "\n";
+    }
+
+    return $saida;
+
+    $file_db = null;
+  } catch(PDOException $e) {
+    echo $e->getMessage();
+  }
+}
+
+function votar($usuario,$motivo) {
+  try {
+    $file_db = new PDO('sqlite:rank.sqlite3');
+    $file_db->setAttribute(PDO::ATTR_ERRMODE,
+                            PDO::ERRMODE_EXCEPTION);
+
+    $file_db->exec("CREATE TABLE IF NOT EXISTS rank (
+                    id INTEGER PRIMARY KEY,
+                    votos INTEGER,
+                    nick TEXT,
+                    motivo TEXT)");
+
+    $insert = "INSERT OR REPLACE INTO rank (votos, nick, motivo)
+    VALUES (:votos, (SELECT nick FROM rank WHERE nick = $usuario), :motivo)";
+
+    $stmt = $file_db->prepare($insert);
+
+    $stmt->bindParam(':nick', $usuario);
+    $stmt->bindParam(':motivo', $motivo);
+
+    $stmt->execute();
+    $file_db = null;
+  }
+  catch(PDOException $e) {
+    echo $e->getMessage();
+  }
+
+}
+
 function emoji($emoji) {
   switch ($emoji) {
     case 'rindo': return "\xF0\x9F\x98\x81"; break;
@@ -91,16 +150,30 @@ function sons($som) {
         CABRON_URL . "snd/Metallica - The Unforgiven.mp3"
       )
   );
-
   $s = $ss[$som][array_rand($ss[$som])];
   return $s;
 }
 
 
 function ddg($consulta) {
-
   $url = 'https://duckduckgo.com/?q=' . urlencode($consulta);
   $pagina = @file_get_contents('https://duckduckgo.com/?q=' . urlencode($consulta));
+  $erro = "Desculpe, não fui capaz de encontrar esta página " . emoji('triste');
+
+  if (!$pagina) return $erro;
+
+  $matches = array();
+  if (preg_match('/<title>(.*?)<\/title>/', $pagina, $matches)) {
+    return trim($matches[1]) . ": " . $url;
+  } else {
+    return $erro;
+  }
+
+}
+
+function aur($consulta) {
+  $url = 'https://aur.archlinux.org/packages/' . urlencode($consulta);
+  $pagina = @file_get_contents('https://aur.archlinux.org/packages/' . urlencode($consulta));
   $erro = "Desculpe, não fui capaz de encontrar esta página " . emoji('triste');
 
   if (!$pagina) return $erro;
@@ -315,6 +388,7 @@ function processaMensagem($message) {
   $chat_id = $message['chat']['id'];
   $usuario = $message['reply_to_message']['from']['first_name'];
   $quem = "@" . $message['from']['username'];
+  $usuario_alvo = $message['reply_to_message']['from']['username'];
 
   if (isset($message['text'])) {
     $text = $message['text'];
@@ -345,11 +419,23 @@ function processaMensagem($message) {
     } else if (strpos($text, "!feriados") === 0) {
       requisicao("sendChatAction", array('chat_id' => $chat_id, 'action' => 'typing'));
       requisicao("sendMessage", array('chat_id' => $chat_id, "reply_to_message_id" => $message_id, "text" => feriados($array_feriados, $hoje)));
+    } else if (strpos($text, "+1") === 0) {
 
-    } else if (strpos($text, "teste") === 0) {
-      requisicao("sendChatAction", array('chat_id' => $chat_id, 'action' => 'typing'));
-      requisicao("sendMessage", array('chat_id' => $chat_id, "reply_to_message_id" => $message_id, "text" => emoji('teste')));
+      if (str_word_count($text) > 2) {
+        if (isset($usuario_alvo) && $usuario_alvo != '') {
+          votar($usuario,$motivo);
+          requisicao("sendChatAction", array('chat_id' => $chat_id, 'action' => 'typing'));
+          requisicao("sendMessage", array('chat_id' => $chat_id, "text" => top()));
+        } else {
+          requisicao("sendChatAction", array('chat_id' => $chat_id, 'action' => 'typing'));
+          requisicao("sendMessage", array('chat_id' => $chat_id, "text" => 'Usuário não encontrado.'));
+        }
+      } else {
+        requisicao("sendChatAction", array('chat_id' => $chat_id, 'action' => 'typing'));
+        requisicao("sendMessage", array('chat_id' => $chat_id, "text" => 'Número errado de parâmetros.'));
+      }
 
+      requisicao("sendMessage", array('chat_id' => $chat_id, "text" => top()));
     } else if (strpos($text, "/admins") === 0) {
       requisicao("sendChatAction", array('chat_id' => $chat_id, 'action' => 'typing'));
       requisicao("sendMessage", array('chat_id' => $chat_id, "reply_to_message_id" => $message_id, "text" => pegaAdmins($chat_id)));
@@ -372,6 +458,10 @@ function processaMensagem($message) {
     } else if (substr(strtolower($text), 0, 5) === "!ddg " || substr(strtolower($text), 0, 4) === "ddg ") {
       requisicao("sendChatAction", array('chat_id' => $chat_id, 'action' => 'typing'));
       requisicao("sendMessage", array('chat_id' => $chat_id, "reply_to_message_id" => $message_id, "text" => ddg($comm)));
+
+    } else if (substr(strtolower($text), 0, 5) === "!aur " || substr(strtolower($text), 0, 4) === "aur ") {
+      requisicao("sendChatAction", array('chat_id' => $chat_id, 'action' => 'typing'));
+      requisicao("sendMessage", array('chat_id' => $chat_id, "reply_to_message_id" => $message_id, "text" => aur($comm)));
 
     } else if ($text === "rdj" || strpos(strtolower($text),"http injector") !== false) {
       requisicao("sendChatAction", array('chat_id' => $chat_id, 'action' => 'typing'));
@@ -466,7 +556,6 @@ function processaMensagem($message) {
     } else if (strpos(strtolower($text),"tosvaldo") !== false) {
       requisicao("sendChatAction", array('chat_id' => $chat_id, 'action' => 'typing'));
       requisicao("sendMessage", array('chat_id' => $chat_id, "reply_to_message_id" => $message_id, "text" => 'https://www.youtube.com/watch?v=LHxFGPrlJBQ'));
-
     } else {
       if ($usuario == "Cabron") {
         requisicao("sendChatAction", array('chat_id' => $chat_id, 'action' => 'typing'));
