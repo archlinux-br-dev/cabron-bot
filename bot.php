@@ -462,6 +462,7 @@ function processaMensagem($message) {
     } else if (substr(strtolower($text), 0, 5) === "!aur " || substr(strtolower($text), 0, 4) === "aur ") {
       requisicao("sendChatAction", array('chat_id' => $chat_id, 'action' => 'typing'));
       requisicao("sendMessage", array('chat_id' => $chat_id, "reply_to_message_id" => $message_id, "text" => aur($comm)));
+      
 
     } else if ($text === "rdj" || strpos(strtolower($text),"http injector") !== false) {
       requisicao("sendChatAction", array('chat_id' => $chat_id, 'action' => 'typing'));
