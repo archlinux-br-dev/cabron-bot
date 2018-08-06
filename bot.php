@@ -10,7 +10,8 @@ require_once "config.php";
 //define('API_URL', 'https://api.telegram.org/bot'.BOT_TOKEN.'/');
 
 $hoje = date('Y-m-d');
-$json_feriados = file_get_contents('json/feriados.json');
+// $json_feriados = file_get_contents('json/feriados.json');
+$json_feriados = file_get_contents('json/holidays.json');
 $array_feriados = json_decode($json_feriados);
 
 function top() {
@@ -83,7 +84,7 @@ function emoji($emoji) {
 }
 
 function feriados($array_feriados, $hoje) {
-       //foreach($array_feriados as $day) {
+      //foreach($array_feriados as $day) {
       foreach($array_feriados as $key => $value){
           $interval[] = abs(strtotime($hoje) - strtotime(key[$array_feriados[$key]]));
       }
@@ -104,20 +105,22 @@ function pegaAdmins($chat_id) {
 }
 
 function cotacoes() {
-  if(!$fp=fopen("https://www.infomoney.com.br/mercados/cambio" , "r" )) {
+  //if(!$fp=fopen("https://www.infomoney.com.br/mercados/cambio" , "r" )) {
+  if(!$fp=fopen("https://economia.uol.com.br/cotacoes/" , "r" )) {
       return "Erro ao abrir a página de cotação" ;
       exit;
+  } else {
+    while(!feof($fp)) {
+        $conteudo .= fgets($fp,1024);
+    }
+    fclose($fp);
+
+    //$valorCompraHTML = explode('class="numbers">', $conteudo);
+    $valorCompraHTML = explode('class="pg-color4">', $conteudo);
+    $valorCompra = trim(strip_tags($valorCompraHTML[1]));
+
+    return $valorCompra;
   }
-
-  while(!feof($fp)) {
-      $conteudo .= fgets($fp,1024);
-  }
-  fclose($fp);
-
-  $valorCompraHTML = explode('class="numbers">', $conteudo);
-  $valorCompra = trim(strip_tags($valorCompraHTML[5]));
-
-  return $valorCompra;
 }
 
 function palavras($string) {
@@ -148,8 +151,12 @@ function sons($som) {
       'rock' => array(
         CABRON_URL . "snd/Joan Jett - I Love Rock And Roll.mp3",
         CABRON_URL . "snd/Metallica - The Unforgiven.mp3"
-      )
+      ),
+      'love' => array(
+        CABRON_URL . "snd/whisper.mp3"
+      )      
   );
+
   $s = $ss[$som][array_rand($ss[$som])];
   return $s;
 }
@@ -386,7 +393,11 @@ function processaMensagem($message) {
   // process incoming message
   $message_id = $message['message_id'];
   $chat_id = $message['chat']['id'];
-  $usuario = $message['reply_to_message']['from']['first_name'];
+  if (isset($message['reply_to_message']['from']['first_name'])) {
+	$usuario = $message['reply_to_message']['from']['first_name'];
+  } else {
+	$usuario = '';
+  }
   $quem = "@" . $message['from']['username'];
   $usuario_alvo = $message['reply_to_message']['from']['username'];
 
@@ -550,6 +561,10 @@ function processaMensagem($message) {
       requisicao("sendChatAction", array('chat_id' => $chat_id, 'action' => 'typing'));
       requisicao("sendAudio", array('chat_id' => $chat_id, "audio" => sons('rock')));
 
+    } else if (strpos($text, "\xE2\x9D\xA4") !== false || strpos($text, '!love') !== false) {
+      requisicao("sendChatAction", array('chat_id' => $chat_id, 'action' => 'typing'));
+      requisicao("sendAudio", array('chat_id' => $chat_id, "audio" => sons('love')));      
+
     } else if ($text === "O @Galdino0800 é o que?") {
       requisicao("sendChatAction", array('chat_id' => $chat_id, 'action' => 'typing'));
       requisicao("sendMessage", array('chat_id' => $chat_id, "text" => 'Hummmmmmmm, danada! ;)'));
@@ -557,6 +572,7 @@ function processaMensagem($message) {
     } else if (strpos(strtolower($text),"tosvaldo") !== false) {
       requisicao("sendChatAction", array('chat_id' => $chat_id, 'action' => 'typing'));
       requisicao("sendMessage", array('chat_id' => $chat_id, "reply_to_message_id" => $message_id, "text" => 'https://www.youtube.com/watch?v=LHxFGPrlJBQ'));
+
     } else {
       if ($usuario == "Cabron") {
         requisicao("sendChatAction", array('chat_id' => $chat_id, 'action' => 'typing'));
