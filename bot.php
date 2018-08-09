@@ -154,7 +154,7 @@ function sons($som) {
       ),
       'love' => array(
         CABRON_URL . "snd/whisper.mp3"
-      )      
+      )
   );
 
   $s = $ss[$som][array_rand($ss[$som])];
@@ -515,6 +515,10 @@ function processaMensagem($message) {
       requisicao("sendChatAction", array('chat_id' => $chat_id, 'action' => 'typing'));
       requisicao("sendSticker", array('chat_id' => $chat_id, "sticker" => 'CAADAgADyikAAktqAwABQX0_7H5oJSoC'));
 
+    } else if (strtolower($text) === "!mp" || strtolower($text) === "\xF0\x9F\x98\x92") {
+      requisicao("sendChatAction", array('chat_id' => $chat_id, 'action' => 'typing'));
+      requisicao("sendSticker", array('chat_id' => $chat_id, "sticker" => 'CAADAQADYAgAAkJRYwGaKd1yBN3AhwI'));
+
     } else if (strtolower($text) === "grupo parado") {
       requisicao("sendChatAction", array('chat_id' => $chat_id, 'action' => 'typing'));
       requisicao("sendAudio", array('chat_id' => $chat_id, "reply_to_message_id" => $message_id, "audio" => CABRON_URL . 'snd/entalado.mp3'));
@@ -563,7 +567,7 @@ function processaMensagem($message) {
 
     } else if (strpos($text, "\xE2\x9D\xA4") !== false || strpos($text, '!love') !== false) {
       requisicao("sendChatAction", array('chat_id' => $chat_id, 'action' => 'typing'));
-      requisicao("sendAudio", array('chat_id' => $chat_id, "audio" => sons('love')));      
+      requisicao("sendAudio", array('chat_id' => $chat_id, "audio" => sons('love')));
 
     } else if ($text === "O @Galdino0800 é o que?") {
       requisicao("sendChatAction", array('chat_id' => $chat_id, 'action' => 'typing'));
