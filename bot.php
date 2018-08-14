@@ -149,8 +149,8 @@ function respostas($resp) {
 function sons($som) {
   $ss = array(
       'rock' => array(
-        CABRON_URL . "snd/Joan Jett - I Love Rock And Roll.mp3",
-        CABRON_URL . "snd/Metallica - The Unforgiven.mp3"
+        CABRON_URL . "snd/rock.mp3",
+        CABRON_URL . "snd/unforgiven.mp3"
       ),
       'love' => array(
         CABRON_URL . "snd/whisper.mp3"
