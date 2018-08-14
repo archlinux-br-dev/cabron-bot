@@ -359,6 +359,15 @@ function processaCallbackQuery($callback){
     requisicao("sendMessage", array('chat_id' => $chat_id, "text" => 'FAQ'));
   } else if ($data == 'duvidas') {
     requisicao("sendMessage", array('chat_id' => $chat_id, "text" => 'Em breve...'));
+  } else if ($data == 'arch') {
+    requisicao("sendChatAction", array('chat_id' => $chat_id, 'action' => 'typing'));
+    requisicao("sendMessage", array('chat_id' => $chat_id, 'disable_web_page_preview' => true, "text" => 'Tutorial de instalação do Arch Linux: http://bit.ly/instalacao-arch'));
+  } else if ($data == 'arch-uefi') {
+    requisicao("sendChatAction", array('chat_id' => $chat_id, 'action' => 'typing'));
+    requisicao("sendMessage", array('chat_id' => $chat_id, 'disable_web_page_preview' => true, "text" => 'Tutorial de instalação do Arch Linux + UEFI: http://bit.ly/arch-uefi'));
+  } else if ($data == 'arch-lvm') {
+    requisicao("sendChatAction", array('chat_id' => $chat_id, 'action' => 'typing'));
+    requisicao("sendMessage", array('chat_id' => $chat_id, 'disable_web_page_preview' => true, "text" => 'Tutorial de instalação do Arch Linux + LVM: http://bit.ly/arch-lvm'));
   }
 
   requisicao("answerCallbackQuery", array('callback_query_id' => $callback_id));
@@ -422,6 +431,21 @@ function processaMensagem($message) {
         )
       )
       );
+
+    if (strpos($text, "/arch") === 0) {
+
+      apiRequestJson("sendMessage", array(
+        'chat_id' => $chat_id, "text" => 'Informações sobre a instalação do Arch Linux', 'reply_markup' => array(
+          'inline_keyboard' => array(
+            array(
+              array('text' => 'Instalação', 'callback_data' => 'arch'),
+              array('text' => 'Instalação UEFI', 'callback_data' => 'arch-uefi'),
+              array('text' => 'Instalação LVM', 'callback_data' => 'arch-lvm')
+            )
+          )
+        )
+      )
+      );      
 
     } else if ($text === "cbr" || strpos(strtolower($text),"http injector") !== false) {
       requisicao("sendChatAction", array('chat_id' => $chat_id, 'action' => 'typing'));
