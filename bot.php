@@ -431,7 +431,7 @@ function processaMensagem($message) {
         )
       )
       );
-      
+
     } else if (strpos($text, "/arch") === 0) {
 
       apiRequestJson("sendMessage", array(
@@ -439,8 +439,8 @@ function processaMensagem($message) {
           'inline_keyboard' => array(
             array(
               array('text' => 'Instalação', 'callback_data' => 'arch'),
-              array('text' => 'Instalação UEFI', 'callback_data' => 'arch-uefi'),
-              array('text' => 'Instalação LVM', 'callback_data' => 'arch-lvm')
+              array('text' => 'Instalação UEFI', 'callback_data' => 'archuefi'),
+              array('text' => 'Instalação LVM', 'callback_data' => 'archlvm')
             )
           )
         )
