@@ -362,10 +362,10 @@ function processaCallbackQuery($callback){
   } else if ($data == 'arch') {
     requisicao("sendChatAction", array('chat_id' => $chat_id, 'action' => 'typing'));
     requisicao("sendMessage", array('chat_id' => $chat_id, 'disable_web_page_preview' => true, "text" => 'Tutorial de instalação do Arch Linux: http://bit.ly/instalacao-arch'));
-  } else if ($data == 'arch-uefi') {
+  } else if ($data == 'archuefi') {
     requisicao("sendChatAction", array('chat_id' => $chat_id, 'action' => 'typing'));
     requisicao("sendMessage", array('chat_id' => $chat_id, 'disable_web_page_preview' => true, "text" => 'Tutorial de instalação do Arch Linux + UEFI: http://bit.ly/arch-uefi'));
-  } else if ($data == 'arch-lvm') {
+  } else if ($data == 'archlvm') {
     requisicao("sendChatAction", array('chat_id' => $chat_id, 'action' => 'typing'));
     requisicao("sendMessage", array('chat_id' => $chat_id, 'disable_web_page_preview' => true, "text" => 'Tutorial de instalação do Arch Linux + LVM: http://bit.ly/arch-lvm'));
   }
@@ -431,8 +431,8 @@ function processaMensagem($message) {
         )
       )
       );
-
-    if (strpos($text, "/arch") === 0) {
+      
+    } else if (strpos($text, "/arch") === 0) {
 
       apiRequestJson("sendMessage", array(
         'chat_id' => $chat_id, "text" => 'Informações sobre a instalação do Arch Linux', 'reply_markup' => array(
