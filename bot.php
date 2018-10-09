@@ -102,7 +102,7 @@ function pegaAdmins($chat_id) {
   }
 
   //return $l;
-  return print_r($l);
+  return var_dump($adm);
 }
 
 function cotacoes() {
@@ -140,6 +140,9 @@ function respostas($resp) {
         "https://pbs.twimg.com/media/DMRvB3FWAAANKnv.jpg",
         CABRON_URL . "img/serjao.jpg",
         "https://www.youtube.com/watch?v=AcekWw-swgo"
+      ),
+      'js' => array(
+        CABRON_URL . "vid/fogo.mp4"
       )
   );
 
@@ -446,7 +449,7 @@ function processaMensagem($message) {
           )
         )
       )
-      );      
+      );
 
     } else if ($text === "cbr" || strpos(strtolower($text),"http injector") !== false) {
       requisicao("sendChatAction", array('chat_id' => $chat_id, 'action' => 'typing'));
@@ -535,6 +538,10 @@ function processaMensagem($message) {
     } else if (strpos(strtolower($text),"aí sim heim") !== false) {
       requisicao("sendChatAction", array('chat_id' => $chat_id, 'action' => 'typing'));
       requisicao("sendVideo", array('chat_id' => $chat_id, "reply_to_message_id" => $message_id, "video" => CABRON_URL . 'vid/olha.mp4'));
+
+    } else if ($text === "JavaScript") {
+      requisicao("sendChatAction", array('chat_id' => $chat_id, 'action' => 'typing'));
+      requisicao("sendVideo", array('chat_id' => $chat_id, "reply_to_message_id" => $message_id, "video" => CABRON_URL . 'vid/fogo.mp4'));
 
     } else if (strtolower($text) === "lol") {
       requisicao("sendChatAction", array('chat_id' => $chat_id, 'action' => 'typing'));
