@@ -101,7 +101,8 @@ function pegaAdmins($chat_id) {
       $l .= $valor . "\n\n";
   }
 
-  return $l;
+  //return $l;
+  return print_r($l);
 }
 
 function cotacoes() {
@@ -133,7 +134,7 @@ function respostas($resp) {
   $r1 = array(
       'ola' => array('E aí beleza?','Bão!?'),
       'bot' => array('Que bot?','Bot!? Onde?','Sou Bot não pô!'),
-      'cabron' => array("Em que posso ser útil? " . emoji('rindo'),"Falou comigo? " . emoji('feliz'),"Pois não..","Ao seu dispor!","Locked & Loaded!","hmmmmm...","Não sei o que dizer..."),
+      'cabron' => array("Em que posso ser útil? " . emoji('rindo'),"Falou comigo? " . emoji('feliz'),"Pois não..","Tô afim de falar não...","Opa!","Ao seu dispor!","Lock & Load!","hmmmmm...","Não sei o que dizer..."),
       'serjao' => array(
         "https://youtu.be/vj51ekCZtB4",
         "https://pbs.twimg.com/media/DMRvB3FWAAANKnv.jpg",
