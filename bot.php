@@ -10,7 +10,6 @@ require_once "config.php";
 //define('API_URL', 'https://api.telegram.org/bot'.BOT_TOKEN.'/');
 
 $hoje = date('Y-m-d');
-// $json_feriados = file_get_contents('json/feriados.json');
 $json_feriados = file_get_contents('json/holidays.json');
 $array_feriados = json_decode($json_feriados);
 
@@ -98,7 +97,7 @@ function pegaAdmins($chat_id) {
   $adm = json_decode($adm);
 
   foreach ($adm as $chave => $valor) {
-      $l .= $valor['user']['username'] . "\n\n";
+      $l .= $adm[$chave]['user']['username'] . "\n\n";
   }
 
   return $l;
