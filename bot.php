@@ -97,7 +97,8 @@ function pegaAdmins($chat_id) {
   $adm = json_decode($adm);
 
   foreach ($adm as $chave => $valor) {
-      $l .= $adm[$chave]['user']['username'] . "\n\n";
+      //$l .= $adm[$chave]['user']['username'] . "\n\n";
+      $l .= $valor . "\n\n";
   }
 
   return $l;
