@@ -1,5 +1,6 @@
 <?php
 
+//irei refatorar com algum framewok mvc
 ini_set('display_errors', 'On');
 error_reporting(E_ALL);
 
