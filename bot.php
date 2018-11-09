@@ -105,7 +105,7 @@ function pegaAdmins($chat_id) {
   return var_dump($adm);
 }
 
-function cotacoes() {
+function cotacoes2() {
   //if(!$fp=fopen("https://www.infomoney.com.br/mercados/cambio" , "r" )) {
   if(!$fp=fopen("https://economia.uol.com.br/cotacoes/" , "r" )) {
       return "Erro ao abrir a página de cotação" ;
@@ -121,6 +121,20 @@ function cotacoes() {
     $valorCompra = trim(strip_tags($valorCompraHTML[1]));
 
     return $valorCompra;
+  }
+}
+
+
+function cotacoes($moeda = 'BRL') {
+  $XMLContent=file("http://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml");
+  foreach($XMLContent as $line){
+    if(preg_match("/currency='([[:alpha:]]+)'/",$line,$currencyCode)){
+      if(preg_match("/rate='([[:graph:]]+)'/",$line,$rate)){
+        if ($currencyCode[1] == $moeda) {
+          return $rate[1];
+        }
+      }
+    }
   }
 }
 
