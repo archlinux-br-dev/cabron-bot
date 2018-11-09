@@ -34,6 +34,5 @@ function converterMoeda(string $de, string $para){
 
 
 
-if($resultado = converterMoeda('USD', 'BRL')){
-   echo $resultado;
-}
+$resultado = converterMoeda('USD', 'BRL');
+echo $resultado;
