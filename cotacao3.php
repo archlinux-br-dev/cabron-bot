@@ -8,15 +8,15 @@ $dom = new DomDocument;
 $dom->validateOnParse = true;
 
 
-$dom->Load($url);
+//$dom->Load($url);
 
-//$dom->loadHTML($url);
+$dom->loadHTML($url);
 
 //$doc->getElementById('php-basics')->tagName
 
 //$doc->getElementById('knowledge-currency__tgt-amount')->tagName->item(0)->nodeValue
 //
-echo $dom->getElementById('knowledge-currency__tgt-amount')->item(0)->nodeValue;
+echo $dom->getElementById('knowledge-currency__tgt-amount')->tagName;
 
 //$result = $dom->getElementsByTagName('span')->item(0)->nodeValue;
 
