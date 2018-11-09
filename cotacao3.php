@@ -31,7 +31,7 @@ function getElemById($id,$url)
     return $xpath->query("//*[@id='$id']")->item(0);
 }
 //
-$elem = getElemById('zci--currency-amount-right');
+$elem = getElemById('zci--currency-amount-right',$url);
 //echo $elem->nodeValue;
 //
 var_dump($elem);
