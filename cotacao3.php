@@ -32,7 +32,9 @@ function getElemById($id,$url)
 }
 //
 $elem = getElemById('zci--currency-amount-right');
-echo $elem->nodeValue;
+//echo $elem->nodeValue;
+//
+var_dump($elem);
 
 //$result = $dom->getElementsByTagName('span')->item(0)->nodeValue;
 
