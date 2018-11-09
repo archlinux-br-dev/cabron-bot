@@ -1,4 +1,8 @@
 <?php
+
+ini_set('display_errors', 'On');
+error_reporting(E_ALL);
+
 function converterMoeda(string $de, string $para){
 
     $parametros = [
