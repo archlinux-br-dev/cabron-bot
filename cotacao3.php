@@ -24,8 +24,8 @@ $dom->loadHTML($url);
 
 //$elem = $dom->getElementById('knowledge-currency__tgt-amount');
 //
-$elem = $dom->getElementById('zci--currency-amount-right')->tagName;
-echo var_dump($elem);
+$elem = $dom->getElementById('zci--currency-amount-right');
+echo $elem[0]->nodeValue;
 
 //$result = $dom->getElementsByTagName('span')->item(0)->nodeValue;
 
