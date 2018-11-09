@@ -1,11 +1,16 @@
 <?php
+
+$url = file_get_contents('https://www.google.com.br/search?q=USD+to+BRL');
+
 $dom = new DomDocument;
 
 // We need to validate our document before refering to the id
-//$doc->validateOnParse = true;
-//$doc->Load('book.xml');
+$dom->validateOnParse = true;
 
-$dom->loadHTML('https://www.google.com.br/search?q=USD+to+BRL');
+
+$dom->Load($url);
+
+//$dom->loadHTML($url);
 
 //$doc->getElementById('php-basics')->tagName
 
