@@ -1,6 +1,10 @@
 <?php
 
-$url = file_get_contents('https://www.google.com.br/search?q=USD+to+BRL');
+ini_set('display_errors', 'On');
+error_reporting(E_ALL);
+
+//$url = file_get_contents('https://www.google.com.br/search?q=USD+to+BRL');
+$url = file_get_contents('https://duckduckgo.com/?q=USD+in+BRL&t=h_&ia=currency');
 
 $dom = new DomDocument;
 
@@ -18,7 +22,9 @@ $dom->loadHTML($url);
 //
 //echo $dom->getElementById('knowledge-currency__tgt-amount')->tagName;
 
-$elem = $dom->getElementById('knowledge-currency__tgt-amount');
+//$elem = $dom->getElementById('knowledge-currency__tgt-amount');
+//
+$elem = $dom->getElementById('zci--currency-amount-right');
 echo $elem->nodeValue;
 
 //$result = $dom->getElementsByTagName('span')->item(0)->nodeValue;
