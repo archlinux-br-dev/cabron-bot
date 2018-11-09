@@ -418,7 +418,7 @@ function processaMensagem($message) {
     $text = $message['text'];
     $comm = substr(strstr($text," "), 1);
 
-    if (strpos($text, "/info") === 0) {
+    if (strpos($text, "/cabron") === 0) {
 
       apiRequestJson("sendMessage", array(
         'chat_id' => $chat_id, "text" => 'Informações sobre o Projeto Cabron', 'reply_markup' => array(
