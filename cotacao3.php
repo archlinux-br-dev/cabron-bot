@@ -16,7 +16,10 @@ $dom->loadHTML($url);
 
 //$doc->getElementById('knowledge-currency__tgt-amount')->tagName->item(0)->nodeValue
 //
-echo $dom->getElementById('knowledge-currency__tgt-amount')->tagName;
+//echo $dom->getElementById('knowledge-currency__tgt-amount')->tagName;
+
+$elem = $dom->getElementById('knowledge-currency__tgt-amount');
+echo $elem->nodeValue;
 
 //$result = $dom->getElementsByTagName('span')->item(0)->nodeValue;
 
