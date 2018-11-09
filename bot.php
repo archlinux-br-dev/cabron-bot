@@ -479,7 +479,7 @@ function processaMensagem($message) {
       requisicao("sendChatAction", array('chat_id' => $chat_id, 'action' => 'typing'));
       requisicao("sendMessage", array('chat_id' => $chat_id, "reply_to_message_id" => $message_id, "text" => pegaAdmins($chat_id)));
 
-    } else if (strpos(strtolower($text),"cotação dolar") !== false || strpos(strtolower($text),"cotação do dolar") !== false || strpos(strtolower($text),"cotacao dolar") !== false || strpos(strtolower($text),"cotacao do dolar") !== false) {
+    } else if (strpos(strtolower($text),"cotação dólar") !== false || strpos(strtolower($text),"cotação dolar") !== false || strpos(strtolower($text),"cotação do dolar") !== false || strpos(strtolower($text),"cotacao dolar") !== false || strpos(strtolower($text),"cotacao do dolar") !== false) {
         requisicao("sendChatAction", array('chat_id' => $chat_id, 'action' => 'typing'));
         requisicao("sendMessage", array('chat_id' => $chat_id, 'reply_to_message_id' => $message_id, 'parse_mode' => 'markdown', "text" => "A cotação do dolar hoje é *" . cotacoes() . "*"));
 
