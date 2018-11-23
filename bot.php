@@ -587,7 +587,7 @@ function processaMensagem($message) {
 
     } else if (strpos(strtolower($text),"brincadeira sadia") !== false) {
       requisicao("sendChatAction", array('chat_id' => $chat_id, 'action' => 'typing'));
-      requisicao("sendAudio", array('chat_id' => $chat_id, "audio" => CABRON_URL . 'snd/oldspice.mp3'));
+      requisicao("sendAudio", array('chat_id' => $chat_id, "audio" => CABRON_URL . 'snd/brincadeira_sadia.mp3'));
 
     } else if ($text === "!osf") {
       requisicao("sendChatAction", array('chat_id' => $chat_id, 'action' => 'typing'));
